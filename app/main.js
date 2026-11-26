@@ -10,7 +10,7 @@
 // window.__shotReady is false while a page renders and true once it is on
 // screen, so a screenshot script knows when to capture.
 
-import { INDICATORS, PROVINCES } from './data.js';
+import { AGE_BANDS, HEADLINE, INDICATORS, PEERS, PROVINCES, RELEASES, SECTORS, SERIES, SOURCES, TRADE, YEARS } from './data.js';
 import { bandingkan, ekonomi, home, indikator, missing, penduduk, provinsi, sumber } from './views.js';
 import { hbarChart } from './charts.js';
 
@@ -128,6 +128,34 @@ function wirePage(route) {
       const link = document.createElement('a');
       link.href = url;
       link.download = 'nusastat-indikator.csv';
+      link.click();
+      URL.revokeObjectURL(url);
+    });
+  }
+  // Whole-dataset JSON download on the Sources page.
+  const srcJson = document.getElementById('src-json');
+  if (srcJson) {
+    srcJson.addEventListener('click', () => {
+      const dataset = {
+        site: 'NusaStat — Portal Statistik Nasional Indonesia',
+        updated: '26 November 2026',
+        headline: HEADLINE,
+        years: YEARS,
+        series: SERIES,
+        ageBands: AGE_BANDS,
+        sectors: SECTORS,
+        provinces: PROVINCES,
+        trade: TRADE,
+        peers: PEERS,
+        releases: RELEASES,
+        indicators: INDICATORS,
+        sources: SOURCES,
+      };
+      const blob = new Blob([JSON.stringify(dataset, null, 2)], { type: 'application/json;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'nusastat-dataset.json';
       link.click();
       URL.revokeObjectURL(url);
     });
